@@ -116,6 +116,80 @@ body.museum .site,body:not(.museum) #museum{display:none}
 .cat{background:var(--card);box-shadow:var(--sh);padding:1.6rem}.cat h3{font-size:1.8rem}.cat p{font-size:.92rem;color:var(--mute);margin-top:.7rem}.cat em{display:block;margin-top:1rem;font:italic 400 1.1rem/1.55 'Cormorant Garamond',serif}
 .cat .rd{margin:.4rem .8rem 0 0;font-size:.95rem}
 .strip{display:grid;gap:1rem}@media(min-width:700px){.strip{grid-template-columns:repeat(3,1fr)}}.strip figcaption{font-size:.8rem;color:var(--mute);margin-top:.4rem}
+
+/* ===== Mobile / touch ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent}
+img{max-width:100%}
+button,a,.pic{touch-action:manipulation}
+header{padding-left:max(clamp(1rem,4vw,3rem),env(safe-area-inset-left));padding-right:max(clamp(1rem,4vw,3rem),env(safe-area-inset-right))}
+.facts b,.mh p{overflow-wrap:anywhere}
+
+/* touch devices: no sticky hover states, bigger tap areas */
+@media(hover:none){
+ .card:hover .pic img{transform:none}
+ .card:hover{border-color:transparent}
+ .tg:hover{background:none;color:var(--gold)}
+ .btn:hover{background:none;border-color:var(--ink);color:inherit}
+ .heart:hover{background:none}
+ nav a:hover::after{width:0}
+ .nb,.nb:hover{background:rgba(0,0,0,.55);color:var(--gold)}
+ .rd{position:relative}
+ .rd::before{content:"";position:absolute;inset:-.5rem -.3rem}
+}
+
+/* phones */
+@media(max-width:720px){
+ html{scroll-padding-top:110px}
+ header{flex-wrap:wrap;justify-content:center;row-gap:.2rem;padding-top:calc(.6rem + env(safe-area-inset-top));padding-bottom:.35rem}
+ .brand{font-size:1.2rem}
+ .brand span{display:none}
+ nav{width:100%;justify-content:space-between;gap:.25rem;font-size:.86rem}
+ nav a{padding:.55rem .3rem}
+ .tg{width:2.5rem;height:2.5rem}
+ .hero{min-height:80vh;min-height:80svh;padding:3rem 1rem}
+ .hero p{font-size:.97rem}
+ .btn{padding:.9rem 1.6rem}
+ .filters{gap:.5rem;margin-bottom:2rem}
+ .filters button{padding:.6rem 1.05rem;min-height:44px}
+ .grid{gap:1.5rem}
+ .info{padding:1.1rem 1.15rem 1.25rem}
+ .info h3{font-size:1.6rem}
+ .heart{width:2.75rem;height:2.75rem}
+ .mh{padding:3.5rem 1rem 1.5rem}
+ .facts div{padding:1.1rem 1.2rem}
+ .facts b{font-size:1.2rem}
+ .cat{padding:1.3rem}
+ .cat .rd{display:inline-block;margin:.2rem .8rem .2rem 0}
+ footer{padding-bottom:calc(2.5rem + env(safe-area-inset-bottom))}
+}
+
+/* full-screen viewer below the desktop breakpoint */
+@media(max-width:849px){
+ .lb{padding:0}
+ .panel{width:100%;height:100vh;height:100dvh;max-height:none;border:0;background:rgba(14,13,11,.96);overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+ .bigw{padding-top:calc(3.25rem + env(safe-area-inset-top))}
+ .big{min-height:0;padding:.5rem .75rem}
+ .big img{max-height:46vh;max-height:46dvh}
+ .tabs{padding:.5rem .75rem 0;gap:.45rem}
+ .tabs button{padding:.5rem .95rem;font-size:.8rem;min-height:38px}
+ .cap{padding:.4rem .75rem}
+ .txt{padding:1.25rem 1.25rem calc(6rem + env(safe-area-inset-bottom))}
+ .txt h2{font-size:2.1rem}
+ .txt p{font-size:1.05rem;line-height:1.65}
+ .txt p.lead{font-size:1.18rem}
+ #cl{top:calc(.5rem + env(safe-area-inset-top));right:.75rem;width:2.75rem;height:2.75rem;display:grid;place-items:center;font-size:1.9rem;padding-bottom:.15rem;background:rgba(0,0,0,.45);border:1px solid rgba(197,160,89,.6);border-radius:50%}
+ .nb{top:auto;transform:none;bottom:calc(.9rem + env(safe-area-inset-bottom));width:2.9rem;height:2.9rem;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+ #pv{left:1rem}#nx{right:1rem}
+}
+
+/* phones held sideways: image and text side by side */
+@media(max-width:849px) and (orientation:landscape) and (max-height:520px){
+ .panel{grid-template-columns:1fr 1fr;overflow:hidden}
+ .bigw{padding-top:0;overflow:auto}
+ .big img{max-height:62vh;max-height:62dvh}
+ .txt{overflow:auto;max-height:100dvh;padding:3.5rem 1.25rem 5rem}
+}
 </style>
 </head>
 <body>
@@ -187,7 +261,7 @@ let ast;function auto(){clearInterval(ast);ast=setInterval(()=>{sh=(sh+1)%A[cur]
 function show(i,k=0){cur=i;sh=k;const x=A[i];
  $("#lt").innerHTML=`<span class="no">Artwork ${pad(i)}</span><h2>${esc(x.t)}</h2><div>${esc(x.a)}</div><div class="med">${esc(x.m)}</div>${x.th?`<span class="tag">${esc(x.th)}</span>`:""}`
  +x.intro.map(p=>`<p class="lead">${esc(p)}</p>`).join("")+x.sec.map(s=>`<h4>${esc(s.h)}</h4>`+s.p.map(p=>`<p>${esc(p)}</p>`).join("")).join("");
- $("#lt").scrollTop=0;shot();auto()}
+ $("#lt").scrollTop=0;$(".panel").scrollTop=0;shot();auto()}
 function openLb(i,k){show(i,k||0);lb.classList.add("open");document.body.style.overflow="hidden";$("#cl").focus()}
 function closeLb(){clearInterval(ast);lb.classList.remove("open");document.body.style.overflow=""}
 function step(d){let v=vis();if(!v.length)v=A.map((_,i)=>i);const p=Math.max(0,v.indexOf(cur));show(v[(p+d+v.length)%v.length])}
@@ -195,6 +269,10 @@ $("#tabs").onclick=e=>{const b=e.target.closest("button");if(b){sh=+b.dataset.j;
 $("#bg").onclick=()=>{sh=(sh+1)%A[cur].shots.length;shot(1);auto()};
 $("#cl").onclick=closeLb;$("#pv").onclick=()=>step(-1);$("#nx").onclick=()=>step(1);lb.onclick=e=>{if(e.target===lb)closeLb()};
 document.addEventListener("keydown",e=>{if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLb();else if(e.key==="ArrowLeft")step(-1);else if(e.key==="ArrowRight")step(1)});
+/* swipe left/right on the image to change artwork */
+{let tx=0,ty=0;const w=$(".bigw");
+w.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+w.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)step(dx<0?1:-1)},{passive:true})}
 /* Life 'n Arts page */
 document.querySelectorAll("[data-im]").forEach(i=>i.src=IM[i.dataset.im]);
 const CT=[["Paintings","Painting","2D visual art in oil on canvas, highlighting local narratives, portraits and rural landscapes.","The paintings evoke nostalgia and reverence for regional identity, turning everyday provincial life into timeless visual stories."],
